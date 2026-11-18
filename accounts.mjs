@@ -2,7 +2,7 @@ import {healthSummary} from './health-model.mjs';
 import {validStart,programWeek} from './program-weeks.mjs';
 import {sessionCalendar} from './calendar.mjs';
 import {validate} from './core.mjs';
-export const PREFIX='full-body-tracker:account-v3:';
+export const PREFIX='fbt-beta:account-v3:';
 export const blank=()=>({app:'full-body-tracker',version:2,records:[],sessions:[],gyms:[],deletedWorkouts:[]});
 export function checked(value,exercises){
  const state=validate(value,exercises);const healthSettings=value.healthSettings;if(healthSettings!==undefined&&(typeof healthSettings.enabled!=='boolean'||typeof healthSettings.autoSync!=='boolean'||typeof healthSettings.consentAt!=='string'||!Number.isFinite(Date.parse(healthSettings.consentAt))))throw Error('Configuração do Saúde inválida.');if(value.programStartDate!==undefined&&!validStart(value.programStartDate))throw Error('Data inicial do programa inválida.');
@@ -26,8 +26,9 @@ export class Accounts{
  key(uid=this.uid){return PREFIX+uid;}
  lock(){this.uid=null;this.env=null;this.onchange();}
  open(uid){this.lock();const raw=this.storage.getItem(this.key(uid));let env=raw?JSON.parse(raw):{data:blank(),dirty:false,base:null,serial:0};env.data=checked(env.data,this.exercises);
- // Migrate only the explicitly recorded legacy owner; never claim unowned data.
- if(!raw){const oldMeta=JSON.parse(this.storage.getItem('full-body-tracker:cloud-v1')||'{}'),old=this.storage.getItem('full-body-tracker:v2');if(old&&oldMeta.owner===uid){env={data:checked({...JSON.parse(old),sessions:JSON.parse(this.storage.getItem('full-body-tracker:sessions-v1')||'[]')},this.exercises),dirty:true,base:null,serial:0};this.storage.setItem(this.key(uid),JSON.stringify(env));}}
+
+ // Beta starts empty and never migrates production storage.
+
  this.uid=uid;this.env=env;this.onchange();return env;
  }
  require(){if(!this.uid||!this.env)throw Error('Entre na sua conta para acessar os treinos.');}
