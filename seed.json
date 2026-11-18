@@ -1,0 +1,190 @@
+{
+  "source": "Programa Full Body A/B/C",
+  "exercises": [
+    {
+      "id": "A1",
+      "day": "A",
+      "name": "Agachamento hack ou livre",
+      "sets": 3,
+      "target": "6-10",
+      "unit": "kg"
+    },
+    {
+      "id": "A2",
+      "day": "A",
+      "name": "Supino reto com barra",
+      "sets": 3,
+      "target": "6-10",
+      "unit": "kg"
+    },
+    {
+      "id": "A3",
+      "day": "A",
+      "name": "Remada baixa",
+      "sets": 3,
+      "target": "8-12",
+      "unit": "kg"
+    },
+    {
+      "id": "A4",
+      "day": "A",
+      "name": "Mesa flexora",
+      "sets": 3,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "A5",
+      "day": "A",
+      "name": "Elevação lateral",
+      "sets": 3,
+      "target": "12-15",
+      "unit": "kg"
+    },
+    {
+      "id": "A6",
+      "day": "A",
+      "name": "Rosca direta",
+      "sets": 2,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "A7",
+      "day": "A",
+      "name": "Prancha frontal",
+      "sets": 3,
+      "target": "30-45 s",
+      "unit": "seg"
+    },
+    {
+      "id": "B1",
+      "day": "B",
+      "name": "Leg press 45°",
+      "sets": 3,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "B2",
+      "day": "B",
+      "name": "Puxada alta na frente",
+      "sets": 3,
+      "target": "8-12",
+      "unit": "kg"
+    },
+    {
+      "id": "B3",
+      "day": "B",
+      "name": "Supino inclinado com halteres",
+      "sets": 3,
+      "target": "8-12",
+      "unit": "kg"
+    },
+    {
+      "id": "B4",
+      "day": "B",
+      "name": "Elevação pélvica",
+      "sets": 3,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "B5",
+      "day": "B",
+      "name": "Desenvolvimento com halteres",
+      "sets": 2,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "B6",
+      "day": "B",
+      "name": "Tríceps na polia",
+      "sets": 3,
+      "target": "10-15",
+      "unit": "kg"
+    },
+    {
+      "id": "B7",
+      "day": "B",
+      "name": "Abdominal na polia",
+      "sets": 3,
+      "target": "12-15",
+      "unit": "kg"
+    },
+    {
+      "id": "C1",
+      "day": "C",
+      "name": "Agachamento goblet ou hack",
+      "sets": 3,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "C2",
+      "day": "C",
+      "name": "Crucifixo livre com halteres",
+      "sets": 3,
+      "target": "10-15",
+      "unit": "kg"
+    },
+    {
+      "id": "C3",
+      "day": "C",
+      "name": "Remada articulada",
+      "sets": 3,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "C4",
+      "day": "C",
+      "name": "Mesa flexora (substitui stiff)",
+      "sets": 3,
+      "target": "10-15",
+      "unit": "kg"
+    },
+    {
+      "id": "C5",
+      "day": "C",
+      "name": "Face pull",
+      "sets": 3,
+      "target": "12-15",
+      "unit": "kg"
+    },
+    {
+      "id": "C6",
+      "day": "C",
+      "name": "Rosca martelo",
+      "sets": 2,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "C7",
+      "day": "C",
+      "name": "Tríceps francês",
+      "sets": 2,
+      "target": "10-12",
+      "unit": "kg"
+    },
+    {
+      "id": "C8",
+      "day": "C",
+      "name": "Panturrilha em pé",
+      "sets": 3,
+      "target": "12-15",
+      "unit": "kg"
+    },
+    {
+      "id": "C9",
+      "day": "C",
+      "name": "Prancha lateral",
+      "sets": 3,
+      "target": "20-30 s/lado",
+      "unit": "seg"
+    }
+  ],
+  "records": []
+}
