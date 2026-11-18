@@ -1,4 +1,4 @@
-export const KEY='full-body-tracker:v2';
+export const KEY='fbt-beta:v2';
 export const emptySets=e=>Array.from({length:e.sets},()=>({value:null,reps:null}));
 export function metrics(record,exercise){
  const sets=record?.sets||[], time=exercise.unit==='seg';

@@ -1,6 +1,7 @@
 import {isNative,nativeCall} from './native-bridge.mjs';
-const config={apiKey:'AIzaSyDF5zc2PRrpW5eDfDx0dBNEeIxfzNq6Y6M',authDomain:'full-body-tracker-b4a42.firebaseapp.com',projectId:'full-body-tracker-b4a42',appId:'1:15807856618:web:edc3784651614ac8e93c93'};
+const config={"apiKey": "AIzaSyAQY9IoZHwfMy_I4Xj1btSP5KxAqqfbMgs", "authDomain": "full-body-tracker-beta.firebaseapp.com", "projectId": "full-body-tracker-beta", "storageBucket": "full-body-tracker-beta.firebasestorage.app", "messagingSenderId": "289970098724", "appId": "1:289970098724:web:2725ee4e789dd7f7a83eb1"};
 export async function connect(){
+ if(location.hostname!=="gugasaito.github.io"||!location.pathname.startsWith("/trainning_app_beta/"))throw Error("Pacote BETA: publique somente em /trainning_app_beta/.");
  const [a,auth,f]=await Promise.all(['app','auth','firestore'].map(n=>import(`https://www.gstatic.com/firebasejs/13.2.0/firebase-${n}.js`)));
  const provider=()=>{const p=new auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});return p;};
  const app=a.initializeApp(config),au=auth.getAuth(app),db=f.getFirestore(app);
