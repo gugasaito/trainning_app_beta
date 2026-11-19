@@ -33,10 +33,13 @@ export class Accounts{
  }
  require(){if(!this.uid||!this.env)throw Error('Entre na sua conta para acessar os treinos.');}
  data(){return this.env?structuredClone(this.env.data):null;}
- persist(env){this.require();this.storage.setItem(this.key(),JSON.stringify(env));this.env=env;this.onchange();}
+ recoveryKeys(){const prefix=this.key()+':recovery:';return Array.from({length:this.storage.length||0},(_,i)=>this.storage.key(i)).filter(k=>k?.startsWith(prefix)).sort((a,b)=>Number(a.slice(prefix.length))-Number(b.slice(prefix.length)));}
+ isQuota(e){return e?.name==='QuotaExceededError'||e?.name==='NS_ERROR_DOM_QUOTA_REACHED';}
+ writeLocal(key,value){try{this.storage.setItem(key,value);}catch(e){if(!this.isQuota(e))throw e;for(const old of this.recoveryKeys()){this.storage.removeItem(old);try{this.storage.setItem(key,value);return;}catch(next){if(!this.isQuota(next))throw next;}}throw e;}}
+ persist(env){this.require();this.writeLocal(this.key(),JSON.stringify(env));this.env=env;this.onchange();}
  edit(data){this.require();this.persist({...this.env,data:checked(data,this.exercises),dirty:true,serial:this.env.serial+1});}
- accept(remote){this.require();const v=remoteEnvelope(remote,this.exercises);this.archive();this.persist({data:v.data,dirty:false,base:v.revision,serial:this.env.serial+1});}
- archive(){this.require();this.storage.setItem(this.key()+':recovery:'+Date.now(),JSON.stringify(this.env));}
+ accept(remote){this.require();const v=remoteEnvelope(remote,this.exercises);this.archive(!this.env.dirty);this.persist({data:v.data,dirty:false,base:v.revision,serial:this.env.serial+1});}
+ archive(allowFailure=false){this.require();const keys=this.recoveryKeys();while(keys.length>=2)this.storage.removeItem(keys.shift());const suffix=Math.max(Date.now(),...keys.map(k=>Number(k.split(':').at(-1))+1));try{this.writeLocal(this.key()+':recovery:'+suffix,JSON.stringify(this.env));}catch(e){if(!allowFailure||!this.isQuota(e))throw e;}}
  reconcile(remote){this.require();if(!remote){if(this.env.base!==null&&this.env.base!==0)return 'conflict';this.persist({...this.env,base:0});return 'ready';}const r=remoteEnvelope(remote,this.exercises);if(!this.env.dirty){if(!same(this.env.data,r.data)||this.env.base!==r.revision)this.accept(remote);return 'ready';}if(same(this.env.data,r.data)){this.persist({...this.env,base:r.revision,dirty:false});return 'ready';}if(this.env.base===r.revision)return 'ready';return 'conflict';}
  ack(uid,serial,revision){if(this.uid!==uid)return;this.persist({...this.env,base:revision,dirty:this.env.serial!==serial});}
 }
