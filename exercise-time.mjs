@@ -21,6 +21,7 @@ export function exerciseAction(data,sessionId,exerciseId,action,exercises,now=Da
  const next=structuredClone(data),session=next.sessions.find(s=>s.id===sessionId),exercise=exercises.find(e=>e.id===exerciseId);
  if(!session||session.status!=='running')throw Error('Inicie ou retome o treino antes de iniciar um exercício.');
  if(!exercise||exercise.day!==session.day)throw Error('Exercício não pertence a este treino.');
+ if(session.completedExerciseIds?.includes(exerciseId))throw Error('Exercício finalizado. Clique em Refazer exercício para liberar.');
  if(!Number.isFinite(now)||now<session.startedAt||now<(session.exerciseIntervals?.at(-1)?.endedAt??session.exerciseIntervals?.at(-1)?.startedAt??session.startedAt))throw Error('Horário do exercício inválido.');
  const last=session.exerciseIntervals?.at(-1);
  if(action==='start'){
@@ -41,9 +42,10 @@ export function exerciseReadings(health,session,exerciseId){
  return {points,duration:intervals.reduce((n,i)=>n+i.endedAt-i.startedAt,0),mean:points.length?points.reduce((n,p)=>n+p.bpm,0)/points.length:null,min:points.length?Math.min(...points.map(p=>p.bpm)):null,max:points.length?Math.max(...points.map(p=>p.bpm)):null};
 }
 
-export function markExerciseDone(data,sessionId,exerciseId,done,exercises){
+export function markExerciseDone(data,sessionId,exerciseId,done,exercises,now=Date.now()){
  const next=structuredClone(data),session=next.sessions.find(s=>s.id===sessionId);
  if(!session||typeof done!=='boolean'||!exercises.some(e=>e.id===exerciseId&&e.day===session.day))throw Error('Selecione uma sessão e um exercício válido.');
+ if(done&&session.exerciseIntervals?.at(-1)?.exerciseId===exerciseId&&session.exerciseIntervals.at(-1).endedAt===null)session.exerciseIntervals=closeExercise(session,now).exerciseIntervals;
  const ids=new Set(session.completedExerciseIds??[]);if(done)ids.add(exerciseId);else ids.delete(exerciseId);
  session.completedExerciseIds=[...ids];validateExerciseIntervals(session,exercises);return next;
 }
