@@ -25,6 +25,7 @@ export function exerciseAction(data,sessionId,exerciseId,action,exercises,now=Da
  if(!Number.isFinite(now)||now<session.startedAt||now<(session.exerciseIntervals?.at(-1)?.endedAt??session.exerciseIntervals?.at(-1)?.startedAt??session.startedAt))throw Error('Horário do exercício inválido.');
  const last=session.exerciseIntervals?.at(-1);
  if(action==='start'){
+  if(last?.endedAt===null&&last.exerciseId!==exerciseId)throw Error('Finalize o exercício em andamento antes de iniciar outro.');
   if(last?.endedAt===null&&last.exerciseId===exerciseId)throw Error('Este exercício já está em andamento.');
   if((session.exerciseIntervals?.length??0)>=1000)throw Error('Limite de intervalos desta sessão atingido.');
   session.exerciseIntervals=closeExercise(session,now).exerciseIntervals??[];
@@ -45,6 +46,7 @@ export function exerciseReadings(health,session,exerciseId){
 export function markExerciseDone(data,sessionId,exerciseId,done,exercises,now=Date.now()){
  const next=structuredClone(data),session=next.sessions.find(s=>s.id===sessionId);
  if(!session||typeof done!=='boolean'||!exercises.some(e=>e.id===exerciseId&&e.day===session.day))throw Error('Selecione uma sessão e um exercício válido.');
+ if(session.status==='running'&&session.exerciseIntervals?.at(-1)?.endedAt===null&&session.exerciseIntervals.at(-1).exerciseId!==exerciseId)throw Error('Finalize o exercício em andamento antes de alterar outro exercício.');
  if(done&&session.exerciseIntervals?.at(-1)?.exerciseId===exerciseId&&session.exerciseIntervals.at(-1).endedAt===null)session.exerciseIntervals=closeExercise(session,now).exerciseIntervals;
  const ids=new Set(session.completedExerciseIds??[]);if(done)ids.add(exerciseId);else ids.delete(exerciseId);
  session.completedExerciseIds=[...ids];validateExerciseIntervals(session,exercises);return next;
