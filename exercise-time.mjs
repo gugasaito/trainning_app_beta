@@ -1,4 +1,7 @@
 export function validateExerciseIntervals(session,exercises){
+ if(session.completedExerciseIds!==undefined){
+  if(!Array.isArray(session.completedExerciseIds)||session.completedExerciseIds.length>exercises.length||new Set(session.completedExerciseIds).size!==session.completedExerciseIds.length||session.completedExerciseIds.some(id=>!exercises.some(e=>e.id===id&&e.day===session.day)))throw Error('Exercícios executados inválidos nesta sessão.');
+ }
  if(session.exerciseIntervals===undefined)return;
  if(!Array.isArray(session.exerciseIntervals)||session.exerciseIntervals.length>1000)throw Error('Intervalos de exercícios inválidos.');
  let previousEnd=session.startedAt;
@@ -36,4 +39,11 @@ export function exerciseReadings(health,session,exerciseId){
  const intervals=(session?.exerciseIntervals??[]).filter(i=>i.exerciseId===exerciseId&&i.endedAt!==null);
  const points=(health.heartRateTimeline?.points??[]).filter(p=>exerciseAt(intervals,p.at));
  return {points,duration:intervals.reduce((n,i)=>n+i.endedAt-i.startedAt,0),mean:points.length?points.reduce((n,p)=>n+p.bpm,0)/points.length:null,min:points.length?Math.min(...points.map(p=>p.bpm)):null,max:points.length?Math.max(...points.map(p=>p.bpm)):null};
+}
+
+export function markExerciseDone(data,sessionId,exerciseId,done,exercises){
+ const next=structuredClone(data),session=next.sessions.find(s=>s.id===sessionId);
+ if(!session||typeof done!=='boolean'||!exercises.some(e=>e.id===exerciseId&&e.day===session.day))throw Error('Selecione uma sessão e um exercício válido.');
+ const ids=new Set(session.completedExerciseIds??[]);if(done)ids.add(exerciseId);else ids.delete(exerciseId);
+ session.completedExerciseIds=[...ids];validateExerciseIntervals(session,exercises);return next;
 }
